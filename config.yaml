@@ -1,0 +1,205 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# PHOTOSHOP WORKFLOW MANAGER - Configuration
+# ═══════════════════════════════════════════════════════════════════════════════
+# 
+# Éditez ce fichier pour ajouter/modifier des catégories et des scripts.
+# Après modification, utilisez ⌘R ou le bouton "Rafraîchir" dans l'app.
+#
+# ═══════════════════════════════════════════════════════════════════════════════
+
+app:
+  name: "Photoshop Workflow Manager"
+  version: "1.0.0"
+  language: "fr"
+
+units:
+  default: "mm"
+  available:
+    - { id: "pt", name: "Points" }
+    - { id: "mm", name: "Millimètres" }
+    - { id: "cm", name: "Centimètres" }
+    - { id: "inch", name: "Pouces" }
+    - { id: "px", name: "Pixels" }
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# CATÉGORIES
+# ═══════════════════════════════════════════════════════════════════════════════
+
+categories:
+
+  # PRESSE
+  - id: presse
+    name: "Presse"
+    icon: "newspaper"
+    color: "#C0392B"
+    description: "Scripts pour les publications print et magazines"
+    
+    scripts:
+      - id: create-print-doc
+        name: "Nouveau document Print"
+        file: "presse/create-print-doc.jsx"
+        description: "Crée un document avec profil CMYK et fonds perdus"
+        params:
+          - id: width
+            name: "Largeur"
+            type: number
+            default: 210
+            unit: true
+          - id: height
+            name: "Hauteur"
+            type: number
+            default: 297
+            unit: true
+          - id: resolution
+            name: "Résolution (dpi)"
+            type: number
+            default: 300
+          - id: bleed
+            name: "Fonds perdus"
+            type: number
+            default: 3
+            unit: true
+          - id: colorProfile
+            name: "Profil couleur"
+            type: select
+            options: 
+              - { value: "fogra39", label: "Fogra39 (Europe)" }
+              - { value: "fogra51", label: "Fogra51 (Europe)" }
+              - { value: "gracol", label: "GRACoL (US)" }
+            default: "fogra39"
+
+  # E-COMMERCE
+  - id: ecommerce
+    name: "E-commerce"
+    icon: "shopping-cart"
+    color: "#2980B9"
+    description: "Scripts pour les visuels e-commerce"
+    
+    subcategories:
+      - id: amazon
+        name: "Amazon"
+        scripts:
+          - id: amazon-main
+            name: "Image principale"
+            file: "ecommerce/amazon-main.jsx"
+            description: "Prépare l'image principale Amazon (fond blanc, carré)"
+            params:
+              - id: size
+                name: "Taille"
+                type: select
+                options:
+                  - { value: "1500", label: "1500 x 1500 px" }
+                  - { value: "2000", label: "2000 x 2000 px" }
+                  - { value: "2500", label: "2500 x 2500 px" }
+                default: "2000"
+              - id: whiteBackground
+                name: "Fond blanc pur"
+                type: boolean
+                default: true
+
+  # DIGITAL
+  - id: digital
+    name: "Digital"
+    icon: "monitor"
+    color: "#8E44AD"
+    description: "Scripts pour les campagnes digitales et réseaux sociaux"
+    
+    scripts:
+      - id: export-multi-formats
+        name: "Export multi-formats"
+        file: "digital/export-multi-formats.jsx"
+        description: "Exporte en plusieurs formats sociaux"
+        params:
+          - id: formats
+            name: "Formats"
+            type: multiselect
+            options:
+              - { value: "fb-feed", label: "Facebook Feed" }
+              - { value: "insta-square", label: "Instagram Square" }
+              - { value: "insta-story", label: "Instagram Story" }
+              - { value: "linkedin", label: "LinkedIn" }
+            default: ["fb-feed", "insta-square"]
+
+  # STILL LIFE
+  - id: still-life
+    name: "Still Life"
+    icon: "camera"
+    color: "#16A085"
+    description: "Scripts pour les photos de produits"
+    scripts: []
+
+  # MAKING OF
+  - id: making-of
+    name: "Making Of"
+    icon: "film"
+    color: "#D35400"
+    description: "Scripts pour les contenus behind-the-scenes"
+    scripts: []
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# SCRIPTS COMMUNS (disponibles dans la barre latérale)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+common_scripts:
+
+  - id: export-jpeg
+    name: "Export JPEG"
+    file: "_common/export-jpeg.jsx"
+    icon: "image"
+    description: "Exporte le document en JPEG"
+    params:
+      - id: quality
+        name: "Qualité"
+        type: range
+        min: 1
+        max: 100
+        default: 85
+      - id: suffix
+        name: "Suffixe"
+        type: text
+        default: ""
+        placeholder: "_web"
+
+  - id: resize
+    name: "Redimensionner"
+    file: "_common/resize.jsx"
+    icon: "maximize"
+    description: "Redimensionne le document"
+    params:
+      - id: width
+        name: "Largeur"
+        type: number
+        placeholder: "Auto"
+      - id: height
+        name: "Hauteur"
+        type: number
+        placeholder: "Auto"
+      - id: keepRatio
+        name: "Conserver les proportions"
+        type: boolean
+        default: true
+
+  - id: add-guides
+    name: "Ajouter des repères"
+    file: "_common/add-guides.jsx"
+    icon: "grid"
+    description: "Ajoute des repères au document"
+    params:
+      - id: preset
+        name: "Type"
+        type: select
+        options:
+          - { value: "margins", label: "Marges" }
+          - { value: "columns", label: "Colonnes" }
+          - { value: "center", label: "Centré" }
+        default: "margins"
+      - id: top
+        name: "Haut"
+        type: number
+        default: 10
+        unit: true
+      - id: left
+        name: "Gauche"
+        type: number
+        default: 10
+        unit: true

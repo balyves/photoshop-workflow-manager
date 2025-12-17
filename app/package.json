@@ -1,0 +1,97 @@
+{
+  "name": "photoshop-workflow-manager",
+  "version": "1.0.0",
+  "description": "Gestionnaire de workflows Photoshop avec scripts centralisés par catégories",
+  "main": "src/main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder --mac",
+    "build:dmg": "electron-builder --mac dmg",
+    "build:zip": "electron-builder --mac zip",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VOTRE-USERNAME/photoshop-workflow-manager.git"
+  },
+  "keywords": [
+    "photoshop",
+    "automation",
+    "workflow",
+    "scripts",
+    "macos",
+    "electron"
+  ],
+  "author": "Votre Nom",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "chokidar": "^3.5.3"
+  },
+  "build": {
+    "appId": "com.studio.photoshop-workflow-manager",
+    "productName": "Photoshop Workflow Manager",
+    "copyright": "Copyright © 2024",
+    "mac": {
+      "category": "public.app-category.graphics-design",
+      "icon": "assets/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["universal"]
+        },
+        {
+          "target": "zip",
+          "arch": ["universal"]
+        }
+      ],
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "title": "${productName} ${version}",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "../scripts",
+        "to": "scripts",
+        "filter": ["**/*"]
+      },
+      {
+        "from": "../config.yaml",
+        "to": "config.yaml"
+      },
+      {
+        "from": "../presets",
+        "to": "presets",
+        "filter": ["**/*"]
+      }
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    }
+  }
+}
